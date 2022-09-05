@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #16A2BB;
+            min-height: 100vh;
+            font-weight: 700;
+        }
+
+        .wrapper {
+            width: 450px;
+            border-radius: 7px;
+            background: #fff;
+            padding: 30px 25px 40px;
+
+        }
+
+        .wrapper :where(textarea, input, select, button) {
+            width: 100%;
+            outline: none;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+
+        }
+
+        .wrapper textarea {
+            padding: 8px 13px;
+            height: 270px;
+            border: 1px solid #ccc;
+            resize: none;
+
+        }
+
+        textarea:valid~.save-btn {
+            opacity: 1;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+            background: #148c9f;
+        }
+
+        .wrapper .file-options {
+            display: flex;
+            margin-top: 10px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-options .option {
+            width: calc(100% /2 - 8px);
+        }
+
+        .option input {
+            height: 50px;
+            border: 1px solid #bfbfbf;
+            padding: 0 15px;
+            margin-top: 6px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+
+        }
+
+        .option .select-menu {
+            height: 50px;
+            border: 1px solid #bfbfbf;
+            padding: 0 15px;
+            margin-top: 6px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .select-menu select {
+            margin-top: 14px;
+            background: none;
+        }
+
+        .wrapper .save-btn {
+            color: #fff;
+            cursor: pointer;
+            opacity: 0.6;
+            padding: 16px 0;
+            margin-top: 20px;
+            pointer-events: none;
+            background: #17A2B8;
+        }
+
+        .bg {
+            animation: slide 3s ease-in-out infinite alternate;
+            background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+            bottom: 0;
+            left: -50%;
+            opacity: .5;
+            position: fixed;
+            right: -50%;
+            top: 0;
+            z-index: -1;
+        }
+
+        .bg2 {
+            animation-direction: alternate-reverse;
+            animation-duration: 4s;
+        }
+
+        .bg3 {
+            animation-duration: 5s;
+        }
+
+        .content {
+            background-color: rgba(255, 255, 255, .8);
+            border-radius: .25em;
+            box-shadow: 0 0 .25em rgba(0, 0, 0, .25);
+            box-sizing: border-box;
+            left: 50%;
+            padding: 10vmin;
+            position: fixed;
+            text-align: center;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        h1 {
+            font-family: monospace;
+            font-size: 2rem;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            color: rgb(235, 231, 231);
+            background: rgb(56, 17, 17);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            margin-top: -15px;
+        }
+
+        @keyframes slide {
+            0% {
+                transform: translateX(-25%);
+            }
+
+            100% {
+                transform: translateX(25%);
+            }
+        }
+
+        @media (max-width:500px) {
+            .wrapper {
+                width: 300px;
+                height: 550px;
+                margin: auto;
+            }
+
+            .file-name :placeholder-shown {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg"> </div>
+
+    <div class="bg bg2"></div>
+
+    <div class="bg bg3"></div>
+
+
+
+    <div class="wrapper">
+        <h1> Convert Text To Any File</h1>
+        <textarea spellcheck="false" placeholder="Enter something to save" required></textarea>
+        <div class="file-options">
+            <div class="option file-name">
+                <label>File Name</label>
+                <input type="text" placeholder="Enter File Name">
+            </div>
+            <div class="option save-as">
+                <label for="">Save as</label>
+                <div class="select-menu">
+                    <select>
+                        <option value="text/plain">Text File (.txt)</option>
+                        <option value="text/javascript">JS File (.js)</option>
+                        <option value="text/html">HTML File (.html)</option>
+                        <option value="application/msword">DOC File (.doc)</option>
+                        <option value="application/pdfl">PDF File (.pdf)</option>
+                        <option value="application/vnd.ms-powerpoint">PPT File (.ppt)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <button class="save-btn">Save as Text File</button>
+    </div>
+
+
+    <script>
+        const textarea = document.querySelector("textarea"),
+            file = document.querySelector(".file-name input"),
+            selectMenu = document.querySelector(".save-as select"),
+            saveBtn = document.querySelector(".save-btn");
+
+
+        selectMenu.addEventListener("change", () => {
+            const selectedFormat = selectMenu.options[selectMenu.selectedIndex].text;
+            console.log(selectedFormat);
+            saveBtn.innerText = `Save As ${selectedFormat.split(" ")[0]} File`;
+        });
+
+        saveBtn.addEventListener("click", () => {
+            const blob = new Blob([textarea.value], { type: selectMenu.value });
+            const fileUrl = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.download = file.value;
+            link.href = fileUrl;
+            link.click();
+        });
+    </script>
+</body>
+
+</html>
